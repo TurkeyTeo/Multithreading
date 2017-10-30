@@ -178,6 +178,32 @@
         });
     }
     
+    
+    
+    
+    
+//    dispatch_group_enter：通知group，下面的任务马上要放到group中执行了。
+//    dispatch_group_leave：通知group，任务完成了，该任务要从group中移除了。
+    
+    dispatch_group_t group2 = dispatch_group_create();
+    dispatch_group_enter(group2);
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        sleep(5);//第一个网络请求
+//        注意：因为内部为异步线程，应该在网络请求前写enter请求成功或者失败回调里写leave，否则无效
+        NSLog(@"任务一完成");
+        dispatch_group_leave(group2);
+    });
+    dispatch_group_enter(group2);
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        sleep(8);//第二个网络请求
+//        注意：应该在网络请求前写enter请求成功或者失败回调里写leave，否则无效
+        NSLog(@"任务二完成");
+        dispatch_group_leave(group2);
+    });
+    dispatch_group_notify(group2, dispatch_get_main_queue(), ^{
+        NSLog(@"任务完成");
+    });
+    
 }
 
 - (void)doNSOperation{
@@ -266,11 +292,6 @@
 
 - (void)doSomething:(NSString *)string{
     NSLog(@"%@%@",string,[NSThread currentThread]);
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
