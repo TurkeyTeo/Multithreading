@@ -206,6 +206,20 @@
     
 }
 
+/**
+进程（process），指的是一个正在运行中的可执行文件。每一个进程都拥有独立的虚拟内存空间和系统资源，包括端口权限等，且至少包含一个主线程和任意数量的辅助线程。另外，当一个进程的主线程退出时，这个进程就结束了；
+线程（thread），指的是一个独立的代码执行路径，也就是说线程是代码执行路径的最小分支。在 iOS 中，线程的底层实现是基于 POSIX threads API 的，也就是我们常说的 pthreads ；
+任务（task），指的是我们需要执行的工作，是一个抽象的概念，用通俗的话说，就是一段代码。
+**/
+
+/**
+支持在 operation 之间建立依赖关系，只有当一个 operation 所依赖的所有 operation 都执行完成时，这个 operation 才能开始执行；
+支持一个可选的 completion block ，这个 block 将会在 operation 的主任务执行完成时被调用；
+支持通过 KVO 来观察 operation 执行状态的变化；
+支持设置执行的优先级，从而影响 operation 之间的相对执行顺序；
+支持取消操作，可以允许我们停止正在执行的 operation 。
+**/
+
 - (void)doNSOperation{
     /**
     NSOperation 和 NSOperationQueue 分别对应 GCD 的 任务 和 队列 。
